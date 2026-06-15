@@ -1,0 +1,25 @@
+package baseball.domain;
+
+public enum PitchType {
+
+    FASTBALL("직구"),
+    CUTTER("커터"),
+    CURVEBALL("커브"),
+    SINKER("싱커"),
+    SLIDER("슬라이더"),
+    CHANGEUP("체인지업"),
+    FORKBALL("포크"),
+    TWOSEAM("투심"),
+    Knuckleball("너클");
+
+
+    private final String pitchType;
+
+    PitchType(String pitchType) {
+        this.pitchType = pitchType;
+    }
+
+    public String getPitchType() {
+        return pitchType;
+    }
+}
