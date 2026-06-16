@@ -1,6 +1,6 @@
-package baseball.domain;
+package baseball.domain.player;
 
-public class Hitter extends Player{
+public class Hitter extends Player {
 
     private Zone hitterpowerZone;
     private Zone hitterWeakZone;

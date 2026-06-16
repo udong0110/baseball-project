@@ -1,4 +1,4 @@
-package baseball.domain;
+package baseball.domain.player;
 
 public enum HandType {
     LEFT("left"),

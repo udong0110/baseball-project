@@ -1,4 +1,4 @@
-package baseball.domain;
+package baseball.domain.player;
 
 public enum Team {
     LOTTE("롯데 자이언츠"),

@@ -1,6 +1,6 @@
-package baseball.domain;
+package baseball.domain.stat;
 
-public class HitterStat extends PlayerStat{
+public class HitterStat extends PlayerStat {
 
     private double ops;
     private double avg;

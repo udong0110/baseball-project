@@ -1,4 +1,4 @@
-package baseball.domain;
+package baseball.domain.player;
 
 public enum Zone {
     LEFTHIGH(1,"좌측 상단"),

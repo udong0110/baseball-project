@@ -1,8 +1,8 @@
-package baseball.domain;
+package baseball.domain.player;
 
 import java.util.List;
 
-public class Pitcher extends Player{
+public class Pitcher extends Player {
 
     private List<PitchType> pitchType;
     private PitchType strongPitchType;
