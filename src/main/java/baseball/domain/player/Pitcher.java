@@ -9,7 +9,7 @@ public class Pitcher extends Player {
 
 
     public Pitcher(String name, Team team, HandType hand, List<PitchType> pitchType, PitchType strongPitchType) {
-        super(name, team, hand);
+        super(name, team,hand);
         this.pitchType = pitchType;
         this.strongPitchType = strongPitchType;
     }

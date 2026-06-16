@@ -27,4 +27,13 @@ public enum Zone {
     public String getZoneHeight() {
         return zoneHeight;
     }
+
+    public static Zone findFromNNumber(int zoneNumber) {
+        for (Zone zone : Zone.values()) {
+            if (zone.getZoneNumber() == zoneNumber) {
+                return zone;
+            }
+        }
+        return null;
+    }
 }

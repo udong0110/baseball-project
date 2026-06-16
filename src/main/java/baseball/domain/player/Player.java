@@ -18,7 +18,7 @@ public class Player {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Player player = (Player) o;
-        return Objects.equals(name, player.name) && team == player.team;
+        return Objects.equals(getName(), player.getName()) && getTeam() == player.getTeam() && getHandType() == player.getHandType();
     }
 
     @Override
