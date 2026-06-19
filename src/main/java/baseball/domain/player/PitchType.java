@@ -10,7 +10,7 @@ public enum PitchType {
     CHANGEUP("체인지업"),
     FORKBALL("포크"),
     TWOSEAM("투심"),
-    Knuckleball("너클");
+    KNUCKLEBALL("너클");
 
 
     private final String pitchType;

@@ -9,6 +9,12 @@ public class Player {
     private final HandType handType;
 
     public Player(String name, Team team, HandType hand) {
+        if (name == null || name.trim().isEmpty() || name.length() > 10) {
+            throw new IllegalArgumentException("이름 입력 실패.");
+        }
+        if (team == null || hand == null) {
+            throw new IllegalArgumentException("팀 이름 혹은 주손잡이 입력 실패");
+        }
         this.name = name;
         this.team = team;
         this.handType = hand;

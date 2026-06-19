@@ -10,6 +10,9 @@ public class Pitcher extends Player {
 
     public Pitcher(String name, Team team, HandType hand, List<PitchType> pitchType, PitchType strongPitchType) {
         super(name, team,hand);
+        if (pitchType == null || strongPitchType == null) {
+            throw new IllegalArgumentException("구종 입력실패");
+        }
         this.pitchType = pitchType;
         this.strongPitchType = strongPitchType;
     }
