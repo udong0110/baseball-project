@@ -3,6 +3,7 @@ package baseball.controller;
 import baseball.domain.player.*;
 import baseball.domain.stat.PlayerStat;
 import baseball.repository.PlayerRepository;
+import factory.PlayerCreateFactory;
 
 
 import java.util.Scanner;
@@ -18,57 +19,16 @@ public class BaseballController {
         int playerType = scanner.nextInt();
         scanner.nextLine();
         if (playerType == 1) {
-            registerPitcher();
+            PlayerCreateFactory pitcherCreateFactory = PlayerCreateFactory.createPitcher();
+            repository.save(pitcherCreateFactory.getPlayer(), pitcherCreateFactory.getPlayerStat());
+
         } else if (playerType == 2) {
-            registerHitter();
+            PlayerCreateFactory hitterCreateFactory = PlayerCreateFactory.createHitter();
+            repository.save(hitterCreateFactory.getPlayer(), hitterCreateFactory.getPlayerStat());
+
         } else {
             System.out.println("투수,타자 외의 잘못된 입력입니다.");
         }
-    }
-
-    private void registerHitter() {
-        Team matchedTeam = null;
-        HandType matchedHandType = null;
-        Zone matchedPowerZone = null;
-        Zone matchedWeakZone = null;
-
-        // 타자 정보 입력
-        System.out.print("타자 이름을 입력하세요: ");
-        String hitterName = scanner.nextLine();
-        System.out.print("팀 영문명을 입력하세요 (lotte, doosan 등): ");
-        String teamInputName = scanner.nextLine().toUpperCase();
-
-        matchedTeam = Team.valueOf(teamInputName);
-
-        System.out.print("(왼손, 오른손, 양손)중 타자의 주손을 입력하세요");
-        String handInputType = scanner.nextLine().toUpperCase();
-        matchedHandType = HandType.valueOf(handInputType);
-
-        System.out.println("타자의 강점 존을 입력하세요(1~9) :");
-        int powerZoneInputNumber = scanner.nextInt();
-        matchedPowerZone = Zone.findFromNNumber(powerZoneInputNumber);
-
-        System.out.print("타자의 약점 존을 입력하세요(1~9) :");
-        int weakZoneInputNumber = scanner.nextInt();
-        matchedWeakZone = Zone.findFromNNumber(weakZoneInputNumber);
-        scanner.nextLine();
-
-        // 타자 스탯 입력
-        System.out.print("타자의 타율을 입력하세요(0~1.0사이) : ");
-        double avg = scanner.nextDouble();
-
-        System.out.print("타자의 OPS를 입력하세요(0~2.0 사이) : ");
-        double ops = scanner.nextDouble();
-        scanner.nextLine();
-
-
-    }
-
-
-
-
-    private void registerPitcher() {
-
     }
 
 
