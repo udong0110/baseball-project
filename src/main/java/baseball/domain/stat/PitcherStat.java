@@ -10,4 +10,9 @@ public class PitcherStat extends PlayerStat {
         }
         this.era = era;
     }
+
+    @Override
+    public String toString() {
+        return "era=" + era;
+    }
 }

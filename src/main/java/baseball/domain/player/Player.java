@@ -43,4 +43,9 @@ public class Player {
     public HandType getHandType() {
         return handType;
     }
+
+    @Override
+    public String toString() {
+        return "이름: " + name + ", 팀: " + team;
+    }
 }

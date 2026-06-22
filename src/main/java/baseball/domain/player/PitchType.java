@@ -22,4 +22,18 @@ public enum PitchType {
     public String getPitchType() {
         return pitchType;
     }
+
+    public static PitchType findPitchTypeByKorean(String inputPitchType) {
+        for (PitchType pitchType : PitchType.values()) {
+            if (pitchType.getPitchType().equals(inputPitchType)) {
+                return pitchType;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return pitchType;
+    }
 }

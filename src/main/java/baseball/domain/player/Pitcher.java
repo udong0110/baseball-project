@@ -24,4 +24,13 @@ public class Pitcher extends Player {
     public PitchType getStrongPitchType() {
         return strongPitchType;
     }
+
+    @Override
+    public String toString() {
+        return "Pitcher " +
+                "이름: " + getName() +
+                ", 팀: " + getTeam()+
+                ", 구종=" + pitchType +
+                ", 주무기=" + strongPitchType;
+    }
 }

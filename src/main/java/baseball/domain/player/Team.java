@@ -1,6 +1,6 @@
 package baseball.domain.player;
 
-public enum Team {
+public enum     Team {
     LOTTE("롯데 자이언츠"),
     HANHWA("한화 이글스"),
     DOOSAN("두산 베어스"),

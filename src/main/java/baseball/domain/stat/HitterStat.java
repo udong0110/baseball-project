@@ -25,4 +25,10 @@ public class HitterStat extends PlayerStat {
     public double getAvg() {
         return avg;
     }
+
+    @Override
+    public String toString() {
+        return "ops=" + ops +
+                ", avg=" + avg;
+    }
 }
