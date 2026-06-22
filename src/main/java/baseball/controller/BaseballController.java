@@ -3,7 +3,7 @@ package baseball.controller;
 import baseball.domain.player.*;
 import baseball.domain.stat.PlayerStat;
 import baseball.repository.PlayerRepository;
-import factory.PlayerCreateFactory;
+import baseball.factory.PlayerCreateFactory;
 
 
 import java.util.Map;

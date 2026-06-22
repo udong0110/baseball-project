@@ -1,4 +1,4 @@
-package factory;
+package baseball.factory;
 
 import baseball.domain.player.*;
 import baseball.domain.stat.HitterStat;
