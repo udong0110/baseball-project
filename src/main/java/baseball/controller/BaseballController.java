@@ -6,6 +6,7 @@ import baseball.repository.PlayerRepository;
 import factory.PlayerCreateFactory;
 
 
+import java.util.Map;
 import java.util.Scanner;
 
 public class BaseballController {
@@ -15,7 +16,7 @@ public class BaseballController {
 
     private void registerPlayer() {
         System.out.println("선수 유형을 선택하세요");
-        System.out.print("1. 투수 || 2. 타자");
+        System.out.println("1. 투수 || 2. 타자");
         int playerType = scanner.nextInt();
         scanner.nextLine();
         if (playerType == 1) {
@@ -37,7 +38,12 @@ public class BaseballController {
     }
 
     public void printAllPlayer() {
+        Map<Player, PlayerStat> repositoryAll = repository.findAll();
+        for (Map.Entry<Player, PlayerStat> playerPlusStatEntry : repositoryAll.entrySet()) {
+            System.out.print(playerPlusStatEntry.getKey()+ ", ");
 
+            System.out.println(playerPlusStatEntry.getValue());
+        }
     }
 
     public void pitchingAnalyze() {
@@ -77,7 +83,7 @@ public class BaseballController {
             } catch (IllegalArgumentException | java.util.InputMismatchException e) {
                 System.out.println("\n[입력 오류] " + e.getMessage());
                 System.out.println("메인 메뉴로 돌아갑니다. 다시 시도해 주세요.");
-                scanner.nextLine();
+                //scanner.nextLine();
             }
 
         }
