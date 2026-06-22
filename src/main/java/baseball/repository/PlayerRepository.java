@@ -16,12 +16,7 @@ public class PlayerRepository {
     }
 
     public PlayerStat findByPlayer(Player player) {
-        for (Player playerKey : playerRepositoryMap.keySet()) {
-            if (playerKey.equals(player)) {
-                return playerRepositoryMap.get(player);
-            }
-        }
-        return null;
+        return playerRepositoryMap.get(player);
     }
 
     public Map<Player, PlayerStat> findAll() {
