@@ -22,14 +22,20 @@ public class Player {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) return true;
+        // Hitter,Picther 클래스로 선수를 만들기때문에 Player 클래스로 형변환 시켜줘야함
+        if (!(o instanceof Player)) return false;
+
         Player player = (Player) o;
-        return Objects.equals(getName(), player.getName()) && getTeam() == player.getTeam() && getHandType() == player.getHandType();
+        return Objects.equals(name, player.name) &&
+                team == player.team &&
+                handType == player.handType;
     }
+
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, team);
+        return Objects.hash(getName(), getTeam(), getHandType());
     }
 
     public String getName() {
