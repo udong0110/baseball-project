@@ -35,7 +35,14 @@ public class BaseballController {
     }
 
 
-    private void selectPlayer(String playerName, String teamName) {
+    private void selectPlayer(String playerName, Team teamName, HandType handType) {
+        Player player = new Player(playerName, teamName, handType);
+        PlayerStat playerStat = repository.findByPlayer(player);
+        if (playerStat == null) {
+            System.out.println("해당 선수가 존재하지 않습니다.");
+        } else {
+            System.out.println(player+", "+playerStat);
+        }
 
     }
 
@@ -44,9 +51,9 @@ public class BaseballController {
         Map<Player, PlayerStat> repositoryAll = repository.findAll();
 
         for (Map.Entry<Player, PlayerStat> playerPlusStatEntry : repositoryAll.entrySet()) {
-            System.out.print(playerPlusStatEntry.getKey()+ ", ");
-            System.out.println(playerPlusStatEntry.getValue());
+            System.out.print(playerPlusStatEntry.getKey()+ ", " + playerPlusStatEntry.getValue());
         }
+        System.out.println();
     }
 
     public void pitchingAnalyze() {
@@ -65,11 +72,19 @@ public class BaseballController {
                         registerPlayer();
                     }
                     case 2 -> {
+                        HandType matchedHandType = null;
+                        Team matchedTeam = null;
+
                         System.out.print("이름을 입력하세요: ");
                         String playerName = scanner.nextLine();
-                        System.out.println("팀이름을 입력하세요: ");
-                        String teamName = scanner.nextLine();
-                        selectPlayer(playerName, teamName);
+                        System.out.print("팀이름을 입력하세요(lotte,doosan등): ");
+                        String teamName = scanner.nextLine().toUpperCase();
+                        matchedTeam = Team.valueOf(teamName);
+                        System.out.print("(왼손, 오른손, 양손)중 선수의 주손잡이를 선택하세요: ");
+                        String handType = scanner.nextLine();
+                        matchedHandType = HandType.findType(handType);
+
+                        selectPlayer(playerName, matchedTeam, matchedHandType);
                     }
                     case 3 -> {
                         printAllPlayer();
@@ -86,7 +101,7 @@ public class BaseballController {
             } catch (IllegalArgumentException | java.util.InputMismatchException e) {
                 System.out.println("\n[입력 오류] " + e.getMessage());
                 System.out.println("메인 메뉴로 돌아갑니다. 다시 시도해 주세요.");
-                //scanner.nextLine();
+                scanner.nextLine();    // nextInt에 숫자 외 입력시 버퍼제거용
             }
 
         }

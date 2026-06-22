@@ -43,7 +43,7 @@ public class PlayerCreateFactory {
 
         matchedTeam = Team.valueOf(teamInputName);
 
-        System.out.print("(왼손, 오른손, 양손)중 타자의 주손을 입력하세요");
+        System.out.print("(왼손, 오른손, 양손)중 타자의 주손을 입력하세요: ");
         String handInputType = scanner.nextLine();
         matchedHandType = HandType.findType(handInputType);
 
@@ -80,14 +80,14 @@ public class PlayerCreateFactory {
 
         matchedTeam = Team.valueOf(teamInputName);
 
-        System.out.print("(왼손, 오른손, 양손)중 투수의 주손을 입력하세요");
+        System.out.print("(왼손, 오른손, 양손)중 투수의 주손잡이을 입력하세요: ");
         String handInputType = scanner.nextLine();
         matchedHandType = HandType.findType(handInputType);
 
         List<PitchType> pitchTypes= inputPitchType();  // 값을 여러개 받아야하기 떄문에 별도로 메서드 분리
 
 
-        System.out.print("주무기 구종을 입력하세요(curveball,fastball,slider 등) :");
+        System.out.print("주무기 구종을 입력하세요(커브,직구,슬라이더 등) :");
         String inputPitchType = scanner.nextLine();
         matchedStrongPitchType = PitchType.findPitchTypeByKorean(inputPitchType);
 
@@ -102,7 +102,7 @@ public class PlayerCreateFactory {
 
     private static List<PitchType> inputPitchType() {
         List<PitchType> pitchTypes = new ArrayList<>();
-        System.out.print("구종을 입력하세요(종료는 exit) :  ");
+        System.out.println("구종을 입력하세요(종료는 exit) :  ");
         while (true) {
             String inputPitchType = scanner.nextLine();
             if (inputPitchType.equals("exit")) {
