@@ -84,7 +84,7 @@ public class PlayerCreateFactory {
         String handInputType = scanner.nextLine();
         matchedHandType = HandType.findType(handInputType);
 
-        List<PitchType> pitchTypes= inputPitchType();
+        List<PitchType> pitchTypes= inputPitchType();  // 값을 여러개 받아야하기 떄문에 별도로 메서드 분리
 
 
         System.out.print("주무기 구종을 입력하세요(curveball,fastball,slider 등) :");

@@ -19,10 +19,12 @@ public class BaseballController {
         System.out.println("1. 투수 || 2. 타자");
         int playerType = scanner.nextInt();
         scanner.nextLine();
+        // 투수일 때, 외부 클래스에서 선수,선수스탯 생성 후 보관
         if (playerType == 1) {
             PlayerCreateFactory pitcherCreateFactory = PlayerCreateFactory.createPitcher();
             repository.save(pitcherCreateFactory.getPlayer(), pitcherCreateFactory.getPlayerStat());
-
+    
+        // 타자일 때, 동일
         } else if (playerType == 2) {
             PlayerCreateFactory hitterCreateFactory = PlayerCreateFactory.createHitter();
             repository.save(hitterCreateFactory.getPlayer(), hitterCreateFactory.getPlayerStat());
@@ -38,10 +40,11 @@ public class BaseballController {
     }
 
     public void printAllPlayer() {
+        // PlayerRepository에 findAll메서드 이용해서 실질적인 Map에 접근
         Map<Player, PlayerStat> repositoryAll = repository.findAll();
+
         for (Map.Entry<Player, PlayerStat> playerPlusStatEntry : repositoryAll.entrySet()) {
             System.out.print(playerPlusStatEntry.getKey()+ ", ");
-
             System.out.println(playerPlusStatEntry.getValue());
         }
     }
