@@ -16,7 +16,9 @@ public enum HandType {
     }
 
     public static HandType findType(String string) {
+
         for (HandType type : HandType.values()) {
+
             if (type.handType.equals(string)) {
                 return type;
             }

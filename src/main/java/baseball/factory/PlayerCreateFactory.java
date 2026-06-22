@@ -44,8 +44,8 @@ public class PlayerCreateFactory {
         matchedTeam = Team.valueOf(teamInputName);
 
         System.out.print("(왼손, 오른손, 양손)중 타자의 주손을 입력하세요");
-        String handInputType = scanner.nextLine().toUpperCase();
-        matchedHandType = HandType.valueOf(handInputType);
+        String handInputType = scanner.nextLine();
+        matchedHandType = HandType.findType(handInputType);
 
         System.out.println("타자의 강점 존을 입력하세요(1~9) :");
         int powerZoneInputNumber = scanner.nextInt();
@@ -80,21 +80,16 @@ public class PlayerCreateFactory {
 
         matchedTeam = Team.valueOf(teamInputName);
 
-        System.out.print("(left, right, switch)중 투수의 주손을 입력하세요");
-        String handInputType = scanner.nextLine().toUpperCase();
-        matchedHandType = HandType.valueOf(handInputType);
+        System.out.print("(왼손, 오른손, 양손)중 투수의 주손을 입력하세요");
+        String handInputType = scanner.nextLine();
+        matchedHandType = HandType.findType(handInputType);
 
         List<PitchType> pitchTypes= inputPitchType();
 
 
         System.out.print("주무기 구종을 입력하세요(curveball,fastball,slider 등) :");
         String inputPitchType = scanner.nextLine();
-        for (PitchType value : PitchType.values()) {
-            if (value.getPitchType().equals(inputPitchType)) {
-                matchedStrongPitchType = value;
-                break;
-            }
-        }
+        matchedStrongPitchType = PitchType.findPitchTypeByKorean(inputPitchType);
 
         // 투수 스탯 입력
         System.out.print("투수의 era를 입력하세요(0~100 사이) : ");
@@ -113,10 +108,11 @@ public class PlayerCreateFactory {
             if (inputPitchType.equals("exit")) {
                 break;
             }
-            for (PitchType pitchType : PitchType.values()) {
-                if (pitchType.getPitchType().equals(inputPitchType)) {
-                    pitchTypes.add(pitchType);
-                }
+            PitchType foundPitchType = PitchType.findPitchTypeByKorean(inputPitchType);
+            if (foundPitchType != null) {
+                pitchTypes.add(foundPitchType);
+            } else {
+                System.out.println("잘못된 구종 입력입니다. 다시 입력해주세요.");
             }
         }
         return pitchTypes;
