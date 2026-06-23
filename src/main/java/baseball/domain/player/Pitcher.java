@@ -27,7 +27,7 @@ public class Pitcher extends Player {
 
     @Override
     public String toString() {
-        return "Pitcher " +
+        return "[투수] " +
                 "이름: " + getName() +
                 ", 팀: " + getTeam()+
                 ", 구종=" + pitchType +

@@ -27,7 +27,7 @@ public class Hitter extends Player {
 
     @Override
     public String toString() {
-        return "Hitter " +
+        return "[타자] " +
                 "이름: " + getName() +
                 ", 팀: " + getTeam()+
                 ", 강점 존=" + hitterpowerZone +
