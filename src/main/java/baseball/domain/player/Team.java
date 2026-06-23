@@ -22,4 +22,18 @@ public enum     Team {
     public String getTeamName() {
         return teamName;
     }
+
+    public static Team findTeamByKorean(String inputTeamName) {
+        for (Team team : Team.values()) {
+            if (team.teamName.equals(inputTeamName)) {
+                return team;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return teamName;
+    }
 }
