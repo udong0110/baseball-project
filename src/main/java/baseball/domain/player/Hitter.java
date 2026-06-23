@@ -12,9 +12,9 @@ public class Hitter extends Player {
     public String toString() {
         return "[타자] " +
                 "이름: " + getName() +
-                ", 팀: " + getTeam() +
-                ", 타석: " + getHandType() +
-                ", 포지션: " + getPlayerPosition()
+                " | 팀: " + getTeam() +
+                " | 타석: " + getHandType() +
+                " | 포지션: " + getPlayerPosition()
                 ;
     }
 }

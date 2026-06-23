@@ -61,6 +61,6 @@ public class Player {
 
     @Override
     public String toString() {
-        return "이름: " + name + ", 팀: " + team+", 포지션: "+playerPosition;
+        return "이름:  | " + name + " | 팀: " + team+" | 포지션: "+playerPosition;
     }
 }

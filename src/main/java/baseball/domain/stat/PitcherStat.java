@@ -37,8 +37,8 @@ public class PitcherStat extends PlayerStat {
         String pitchInfo = String.join(", ", pitchList);
 
 
-        return "era=" + era +
-                ", 구종= {" + pitchInfo +"}"+
-                ", 핵심구종=" + strongPitch;
+        return "| era=" + era +
+                " | 구종= {" + pitchInfo +"}"+
+                " | 핵심구종=" + strongPitch;
     }
 }

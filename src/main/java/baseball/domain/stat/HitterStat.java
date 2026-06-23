@@ -53,9 +53,9 @@ public class HitterStat extends PlayerStat {
 
     @Override
     public String toString() {
-        return "ops=" + ops +
-                ", avg=" + avg+
-                ", 강점=" + hitterpowerZone +
-                ", 약점=" + hitterWeakZone ;
+        return "| ops=" + ops +
+                " | avg=" + avg+
+                " | 강점=" + hitterpowerZone +
+                " | 약점=" + hitterWeakZone ;
     }
 }
