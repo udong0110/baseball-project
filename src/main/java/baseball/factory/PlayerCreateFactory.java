@@ -5,9 +5,7 @@ import baseball.domain.stat.HitterStat;
 import baseball.domain.stat.PitcherStat;
 import baseball.domain.stat.PlayerStat;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class PlayerCreateFactory {
 
@@ -30,31 +28,12 @@ public class PlayerCreateFactory {
     }
 
     public static PlayerCreateFactory createHitter() {
-        Team matchedTeam = null;
-        HandType matchedHandType = null;
+
         Zone matchedPowerZone = null;
         Zone matchedWeakZone = null;
 
-        // 타자 정보 입력
-        System.out.print("타자 이름을 입력하세요: ");
-        String hitterName = scanner.nextLine();
-        System.out.print("팀 영문명을 입력하세요 (lotte, doosan 등): ");
-        String teamInputName = scanner.nextLine().toUpperCase();
-
-        matchedTeam = Team.valueOf(teamInputName);
-
-        System.out.print("(왼손, 오른손, 양손)중 타자의 주손을 입력하세요: ");
-        String handInputType = scanner.nextLine();
-        matchedHandType = HandType.findType(handInputType);
-
-        System.out.println("타자의 강점 존을 입력하세요(1~9) :");
-        int powerZoneInputNumber = scanner.nextInt();
-        matchedPowerZone = Zone.findFromNNumber(powerZoneInputNumber);
-
-        System.out.print("타자의 약점 존을 입력하세요(1~9) :");
-        int weakZoneInputNumber = scanner.nextInt();
-        matchedWeakZone = Zone.findFromNNumber(weakZoneInputNumber);
-        scanner.nextLine();
+        // 선수(타자) 정보 입력
+        Player hitter = commonPlayerInfo();
 
         // 타자 스탯 입력
         System.out.print("타자의 타율을 입력하세요(0~1.0사이) : ");
@@ -64,57 +43,86 @@ public class PlayerCreateFactory {
         double ops = scanner.nextDouble();
         scanner.nextLine();
 
-        return new PlayerCreateFactory(new Hitter(hitterName, matchedTeam, matchedHandType, matchedPowerZone, matchedWeakZone), new HitterStat(ops, avg));
+        System.out.println("타자의 강점 존을 입력하세요(1~9) :");
+        int powerZoneInputNumber = scanner.nextInt();
+        matchedPowerZone = Zone.findFromNNumber(powerZoneInputNumber);
+
+        System.out.print("타자의 약점 존을 입력하세요(1~9) :");
+        int weakZoneInputNumber = scanner.nextInt();
+        matchedWeakZone = Zone.findFromNNumber(weakZoneInputNumber);
+        scanner.nextLine();
+        return new PlayerCreateFactory(hitter, new HitterStat(ops, avg,matchedPowerZone, matchedWeakZone));
     }
 
     public static  PlayerCreateFactory createPitcher() {
-        Team matchedTeam = null;
-        HandType matchedHandType = null;
-        PitchType matchedStrongPitchType = null;
 
-        System.out.print("투수 이름을 입력하세요: ");
-        String pitcherName = scanner.nextLine();
-
-        System.out.print("팀 영문명을 입력하세요 (lotte, doosan 등): ");
-        String teamInputName = scanner.nextLine().toUpperCase();
-
-        matchedTeam = Team.valueOf(teamInputName);
-
-        System.out.print("(왼손, 오른손, 양손)중 투수의 주손잡이을 입력하세요: ");
-        String handInputType = scanner.nextLine();
-        matchedHandType = HandType.findType(handInputType);
-
-        List<PitchType> pitchTypes= inputPitchType();  // 값을 여러개 받아야하기 떄문에 별도로 메서드 분리
-
-
-        System.out.print("주무기 구종을 입력하세요(커브,직구,슬라이더 등) :");
-        String inputPitchType = scanner.nextLine();
-        matchedStrongPitchType = PitchType.findPitchTypeByKorean(inputPitchType);
+        Player pitcher = commonPlayerInfo();
 
         // 투수 스탯 입력
         System.out.print("투수의 era를 입력하세요(0~100 사이) : ");
         double inputEra = scanner.nextDouble();
         scanner.nextLine();
 
-        return new PlayerCreateFactory(new Pitcher(pitcherName, matchedTeam, matchedHandType, pitchTypes, matchedStrongPitchType), new PitcherStat(inputEra));
+        Map<PitchType,Pitch> pitches= inputPitches();  // 값을 여러개 받아야하기 떄문에 별도로 메서드 분리
+
+
+        System.out.print("입력한 구종들 중 주무기 구종을 선택하세요: ");
+        String inputStrongPitch = scanner.nextLine();
+        PitchType strongPitchType = PitchType.findPitchTypeByKorean(inputStrongPitch);
+        Pitch strongPitch = pitches.get(strongPitchType);
+
+
+        return new PlayerCreateFactory(pitcher, new PitcherStat(inputEra,pitches, strongPitch));
 
     }
 
-    private static List<PitchType> inputPitchType() {
-        List<PitchType> pitchTypes = new ArrayList<>();
-        System.out.println("구종을 입력하세요(종료는 exit) :  ");
+    private static Map<PitchType,Pitch> inputPitches() {
+        Map<PitchType,Pitch> pitchTypes = new HashMap<>();
         while (true) {
+            System.out.print("구종(커브,직구,슬라이더 등)을 입력하세요(종료는 exit): ");
             String inputPitchType = scanner.nextLine();
             if (inputPitchType.equals("exit")) {
                 break;
             }
-            PitchType foundPitchType = PitchType.findPitchTypeByKorean(inputPitchType);
-            if (foundPitchType != null) {
-                pitchTypes.add(foundPitchType);
-            } else {
-                System.out.println("잘못된 구종 입력입니다. 다시 입력해주세요.");
-            }
+
+            System.out.print("rpm을 입력하세요: ");
+            int inputRpm = scanner.nextInt();
+
+            System.out.print("구속을 입력하세요: ");
+            int inputBallSpeed = scanner.nextInt();
+            scanner.nextLine();
+
+            PitchType pitchType = PitchType.findPitchTypeByKorean(inputPitchType);
+            Pitch pitch = Pitch.createPitch(pitchType, inputRpm,inputBallSpeed);
+
+            pitchTypes.put(pitchType, pitch);
+
         }
         return pitchTypes;
     }
+
+    public static Player commonPlayerInfo() {
+        Team matchedTeam = null;
+        HandType matchedHandType = null;
+        PlayerPosition matchedPosition = null;
+
+        System.out.print("선수 이름을 입력하세요: ");
+        String playerName = scanner.nextLine();
+
+        System.out.print("팀 이름을 입력하세요 (롯데 자이언츠, 한화 이글스 등): ");
+        String InputTeamName = scanner.nextLine();
+        matchedTeam = Team.findTeamByKorean(InputTeamName);
+
+        System.out.print("(왼손, 오른손, 양손)중 타자의 주손을 입력하세요: ");
+        String handInputType = scanner.nextLine();
+        matchedHandType = HandType.findType(handInputType);
+
+        System.out.print("선수의 포지션을 입력하세요(1B,SS,SP 등): ");
+        String inputPosition = scanner.nextLine().toUpperCase();
+        matchedPosition = PlayerPosition.getPlayerPosition(inputPosition);
+
+        return new Player(playerName, matchedTeam, matchedHandType, matchedPosition);
+
+    }
+
 }
