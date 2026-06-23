@@ -1,15 +1,15 @@
 package baseball.domain.player;
 
 public enum Zone {
-    LEFTHIGH(1,"좌측 상단"),
-    MIDDLEHIGH(2,"중앙 상단"),
-    RIGHTHIGH(3,"우측 상단"),
-    LEFTMIDDLE(4,"좌측 중앙"),
+    LEFT_HIGH(1,"좌측 상단"),
+    MIDDLE_HIGH(2,"중앙 상단"),
+    RIGHT_HIGH(3,"우측 상단"),
+    LEFT_MIDDLE(4,"좌측 중앙"),
     MIDDLE(5,"중앙"),
-    RIGHTMIDDLE(6,"우측 중앙"),
-    LEFTLOW(7,"좌측 하단"),
-    MIDDLELOW(8,"중앙 하단"),
-    RIGHTLOW(9,"우측 하단");
+    RIGHT_MIDDLE(6,"우측 중앙"),
+    LEFT_LOW(7,"좌측 하단"),
+    MIDDLE_LOW(8,"중앙 하단"),
+    RIGHT_LOW(9,"우측 하단");
 
 
     private int zoneNumber;
@@ -35,5 +35,10 @@ public enum Zone {
             }
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return zoneHeight;
     }
 }
