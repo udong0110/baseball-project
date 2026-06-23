@@ -1,5 +1,7 @@
 package baseball.domain.player;
 
+import baseball.exception.InvalidPitchMetricException;
+
 import java.util.Objects;
 
 public class Player {
@@ -7,17 +9,19 @@ public class Player {
     private final String name;
     private Team team;
     private final HandType handType;
+    private PlayerPosition playerPosition;
 
-    public Player(String name, Team team, HandType hand) {
-        if (name == null || name.trim().isEmpty() || name.length() > 10) {
-            throw new IllegalArgumentException("이름 입력 실패.");
+    public Player(String name, Team team, HandType hand, PlayerPosition playerPosition) {
+        if (name.length() > 10) {
+            throw new InvalidPitchMetricException("이름 입력 실패.");
         }
-        if (team == null || hand == null) {
-            throw new IllegalArgumentException("팀 이름 혹은 주손잡이 입력 실패");
+        if (name.trim().isEmpty()|| name==null ||team == null || hand == null || playerPosition == null) {
+            throw new IllegalArgumentException("(팀) 이름 및 투타 및 포지션 입력 실패");
         }
         this.name = name;
         this.team = team;
         this.handType = hand;
+        this.playerPosition = playerPosition;
     }
 
     @Override
@@ -29,7 +33,8 @@ public class Player {
         Player player = (Player) o;
         return Objects.equals(name, player.name) &&
                 team == player.team &&
-                handType == player.handType;
+                handType == player.handType
+                && playerPosition==player.playerPosition;
     }
 
 
@@ -50,8 +55,12 @@ public class Player {
         return handType;
     }
 
+    public PlayerPosition getPlayerPosition() {
+        return playerPosition;
+    }
+
     @Override
     public String toString() {
-        return "이름: " + name + ", 팀: " + team;
+        return "이름: " + name + ", 팀: " + team+", 포지션: "+playerPosition;
     }
 }
