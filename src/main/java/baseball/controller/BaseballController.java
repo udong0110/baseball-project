@@ -2,6 +2,7 @@ package baseball.controller;
 
 import baseball.domain.player.*;
 import baseball.domain.stat.PlayerStat;
+import baseball.exception.PlayerNotFound;
 import baseball.repository.PlayerRepository;
 import baseball.factory.PlayerCreateFactory;
 
@@ -39,7 +40,7 @@ public class BaseballController {
         Player player = new Player(playerName, teamName, handType);
         PlayerStat playerStat = repository.findByPlayer(player);
         if (playerStat == null) {
-            System.out.println("해당 선수가 존재하지 않습니다.");
+            throw new PlayerNotFound("선수를 조회할 수 없습니다.");
         } else {
             System.out.println(player+", "+playerStat);
         }
@@ -102,6 +103,8 @@ public class BaseballController {
                 System.out.println("\n[입력 오류] " + e.getMessage());
                 System.out.println("메인 메뉴로 돌아갑니다. 다시 시도해 주세요.");
                 scanner.nextLine();    // nextInt에 숫자 외 입력시 버퍼제거용
+            } catch (PlayerNotFound playerNotFound) {
+                System.out.println("\n[검색 오류] 선수를 찾을 수 없습니다." +playerNotFound.getMessage());
             }
 
         }
