@@ -77,7 +77,7 @@ public class BaseballController {
                     }
                     case 2 -> {
                         System.out.println("=========선택 선수 조회==========");
-                        Player player = PlayerCreateFactory.commonPlayerInfo();
+                        Player player = PlayerCreateFactory.createCommonPlayer();
                         selectPlayer(player);
                     }
                     case 3 -> {

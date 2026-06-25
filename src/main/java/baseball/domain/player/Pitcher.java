@@ -12,7 +12,6 @@ public class Pitcher extends Player {
 
 
 
-
     @Override
     public String toString() {
         return "[투수] " +

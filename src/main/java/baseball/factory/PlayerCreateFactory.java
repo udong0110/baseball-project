@@ -29,50 +29,23 @@ public class PlayerCreateFactory {
 
     public static PlayerCreateFactory createHitter() {
 
-        Zone matchedPowerZone = null;
-        Zone matchedWeakZone = null;
 
-        // 선수(타자) 정보 입력
-        Player hitter = commonPlayerInfo();
-
+        // 선수 정보 입력
+        Player commonHitter = createCommonPlayer();
         // 타자 스탯 입력
-        System.out.print("타자의 타율을 입력하세요(0~1.0사이) : ");
-        double avg = scanner.nextDouble();
+        HitterStat hitterStat = inputHitterStat();
 
-        System.out.print("타자의 OPS를 입력하세요(0~2.0 사이) : ");
-        double ops = scanner.nextDouble();
-        scanner.nextLine();
-
-        System.out.println("타자의 강점 존을 입력하세요(1~9) :");
-        int powerZoneInputNumber = scanner.nextInt();
-        matchedPowerZone = Zone.findFromNNumber(powerZoneInputNumber);
-
-        System.out.print("타자의 약점 존을 입력하세요(1~9) :");
-        int weakZoneInputNumber = scanner.nextInt();
-        matchedWeakZone = Zone.findFromNNumber(weakZoneInputNumber);
-        scanner.nextLine();
-        return new PlayerCreateFactory(hitter, new HitterStat(ops, avg,matchedPowerZone, matchedWeakZone));
+        return new PlayerCreateFactory(new Hitter(commonHitter.getName(),commonHitter.getTeam(),commonHitter.getHandType(),commonHitter.getPlayerPosition()), hitterStat);
     }
 
     public static  PlayerCreateFactory createPitcher() {
 
-        Player pitcher = commonPlayerInfo();
-
+        // 선수 정보 입력
+        Player commonPitcher = createCommonPlayer();
         // 투수 스탯 입력
-        System.out.print("투수의 era를 입력하세요(0~100 사이) : ");
-        double inputEra = scanner.nextDouble();
-        scanner.nextLine();
+        PitcherStat pitcherStat = inputPitcherStat();
 
-        Map<PitchType,Pitch> pitches= inputPitches();  // 값을 여러개 받아야하기 떄문에 별도로 메서드 분리
-
-
-        System.out.print("입력한 구종들 중 주무기 구종을 선택하세요: ");
-        String inputStrongPitch = scanner.nextLine();
-        PitchType strongPitchType = PitchType.findPitchTypeByKorean(inputStrongPitch);
-        Pitch strongPitch = pitches.get(strongPitchType);
-
-
-        return new PlayerCreateFactory(pitcher, new PitcherStat(inputEra,pitches, strongPitch));
+        return new PlayerCreateFactory(new Pitcher(commonPitcher.getName(), commonPitcher.getTeam(), commonPitcher.getHandType(), commonPitcher.getPlayerPosition()), pitcherStat);
 
     }
 
@@ -101,7 +74,7 @@ public class PlayerCreateFactory {
         return pitchTypes;
     }
 
-    public static Player commonPlayerInfo() {
+    public static Player createCommonPlayer() {
         Team matchedTeam = null;
         HandType matchedHandType = null;
         PlayerPosition matchedPosition = null;
@@ -125,4 +98,43 @@ public class PlayerCreateFactory {
 
     }
 
+    private static HitterStat inputHitterStat() {
+
+        Zone matchedPowerZone = null;
+        Zone matchedWeakZone = null;
+
+        System.out.print("타자의 타율을 입력하세요(0~1.0사이) : ");
+        double avg = scanner.nextDouble();
+
+        System.out.print("타자의 OPS를 입력하세요(0~2.0 사이) : ");
+        double ops = scanner.nextDouble();
+        scanner.nextLine();
+
+        System.out.println("타자의 강점 존을 입력하세요(1~9) :");
+        int powerZoneInputNumber = scanner.nextInt();
+        matchedPowerZone = Zone.findFromNNumber(powerZoneInputNumber);
+
+        System.out.print("타자의 약점 존을 입력하세요(1~9) :");
+        int weakZoneInputNumber = scanner.nextInt();
+        matchedWeakZone = Zone.findFromNNumber(weakZoneInputNumber);
+        scanner.nextLine();
+
+        return new HitterStat(ops, avg, matchedPowerZone, matchedWeakZone);
+    }
+
+    private static PitcherStat inputPitcherStat() {
+        System.out.print("투수의 era를 입력하세요(0~100 사이) : ");
+        double inputEra = scanner.nextDouble();
+        scanner.nextLine();
+
+        Map<PitchType,Pitch> pitches= inputPitches();  // 값을 여러개 받아야하기 떄문에 별도로 메서드 분리
+
+
+        System.out.print("입력한 구종들 중 주무기 구종을 선택하세요: ");
+        String inputStrongPitch = scanner.nextLine();
+        PitchType strongPitchType = PitchType.findPitchTypeByKorean(inputStrongPitch);
+        Pitch strongPitch = pitches.get(strongPitchType);
+
+        return new PitcherStat(inputEra, pitches, strongPitch);
+    }
 }
