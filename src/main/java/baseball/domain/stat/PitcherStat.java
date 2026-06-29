@@ -2,11 +2,9 @@ package baseball.domain.stat;
 
 import baseball.domain.player.Pitch;
 import baseball.domain.player.PitchType;
-import baseball.domain.player.PlayerPosition;
 import baseball.exception.InvalidPitchMetricException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
