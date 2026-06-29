@@ -13,8 +13,8 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class BaseballController {
-    private Scanner scanner = new Scanner(System.in);
-    private PlayerRepository repository = new PlayerRepository();
+    private final Scanner scanner = new Scanner(System.in);
+    private final PlayerRepository repository = new PlayerRepository();
 
 
     private void registerPlayer() {
@@ -40,19 +40,18 @@ public class BaseballController {
 
 
     private void selectPlayer(Player player) {
-        PlayerStat playerStat = repository.findByPlayer(player);
+        PlayerStat playerStat = PlayerRepository.findByPlayer(player);
         if (playerStat == null) {
-            throw new PlayerNotFound("선수를 조회할 수 없습니다.");
+            System.out.println("조회 결과 선택한 선수가 존재하지 않습니다.");
         } else {
-            System.out.println(player+", "+playerStat);
+            System.out.println(player + " " + playerStat);
         }
-
     }
 
     public void printAllPlayer() {
         System.out.println("전체 선수를 조회하는 중...");
-        // PlayerRepository에 findAll메서드 이용해서 실질적인 Map에 접근
-        Map<Player, PlayerStat> repositoryAll = repository.findAll();
+        // PlayerRepository에 getMap메서드 이용해서 실질적인 Map에 접근
+        Map<Player, PlayerStat> repositoryAll = PlayerRepository.getMap();
 
         for (Map.Entry<Player, PlayerStat> playerPlusStatEntry : repositoryAll.entrySet()) {
             System.out.print(playerPlusStatEntry.getKey()+ ", " + playerPlusStatEntry.getValue());
@@ -77,8 +76,22 @@ public class BaseballController {
                     }
                     case 2 -> {
                         System.out.println("=========선택 선수 조회==========");
-                        Player player = PlayerCreateFactory.createCommonPlayer();
-                        selectPlayer(player);
+                        System.out.println("선수 유형을 선택하세요");
+                        System.out.println("1. 투수 || 2. 타자");
+                        int playerType = scanner.nextInt();
+                        scanner.nextLine();
+                        if (playerType == 1) {
+                            Player inputPitcher = PlayerCreateFactory.createCommonPitcher();
+                            selectPlayer(inputPitcher);
+
+                        } else if (playerType == 2) {
+                            Player inputHitter = PlayerCreateFactory.createCommonHitter();
+                            selectPlayer(inputHitter);
+
+                        } else {
+                            System.out.println("투수,타자 외의 잘못된 입력입니다.");
+                        }
+
                     }
                     case 3 -> {
                         printAllPlayer();
