@@ -19,11 +19,21 @@ public class PlayerRepository {
         return playerRepositoryMap;
     }
 
-    public static PlayerStat findByPlayer(Player player) {
+    public static PlayerStat findStatByPlayer(Player player) {
         return playerRepositoryMap.get(player);
     }
 
-   /* public static Map.Entry<Player, PlayerStat> getEntry() {
-    }*/
+    public static Player findPlayer(String name, Team team, int backNumber) {
+        for (Player keyPlayer : playerRepositoryMap.keySet()) {
+            if (keyPlayer.getName().equalsIgnoreCase(name)
+            && keyPlayer.getTeam().equals(team)
+            && keyPlayer.getBackNumber()==backNumber) {
+                return keyPlayer;
+            }
+        }
+        return null;
+    }
+
+
 
 }
