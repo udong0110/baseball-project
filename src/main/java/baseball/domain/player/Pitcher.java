@@ -30,9 +30,9 @@ public class Pitcher extends Player {
         return "[투수] " +
                 "이름: " + getName() +
                 " | 팀: " + getTeam() +
-                " | 등번호: "+ getBackNumber() +
-                " | 투구: " + handType +
-                " | 포지션: " + position;
+                " | 등번호: " + getBackNumber() +
+                " | 투구: " + handType.getDescription() +
+                " | 포지션: " + position + "(" + position.getPositionName() + ")";
 
     }
 }

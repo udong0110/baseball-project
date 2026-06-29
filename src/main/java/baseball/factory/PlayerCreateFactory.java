@@ -81,7 +81,7 @@ public class PlayerCreateFactory {
         System.out.print("선수 이름을 입력하세요: ");
         String playerName = scanner.nextLine();
 
-        System.out.print("팀 이름을 입력하세요 (롯데 자이언츠, 한화 이글스 등): ");
+        System.out.print("팀 이름을 입력하세요 (롯데 자이언츠, 한화 이글스, lotte 등): ");
         String InputTeamName = scanner.nextLine();
         matchedTeam = Team.findTeamByKorean(InputTeamName);
 
@@ -109,7 +109,7 @@ public class PlayerCreateFactory {
         System.out.print("선수 이름을 입력하세요: ");
         String playerName = scanner.nextLine();
 
-        System.out.print("팀 이름을 입력하세요 (롯데 자이언츠, 한화 이글스 등): ");
+        System.out.print("팀 이름을 입력하세요 (롯데 자이언츠, 한화 이글스, lotte 등): ");
         String InputTeamName = scanner.nextLine();
         matchedTeam = Team.findTeamByKorean(InputTeamName);
 
