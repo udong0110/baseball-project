@@ -27,7 +27,7 @@ public class Hitter extends Player {
                 "이름: " + getName() +
                 " | 팀: " + getTeam() +
                 " | 등번호: "+ getBackNumber() +
-                " | 타석: " + handType +
-                " | 포지션: " + position;
+                " | 타석: " + handType.getDescription() +
+                " | 포지션: " + position+"("+position.getPositionName()+")";
     }
 }
