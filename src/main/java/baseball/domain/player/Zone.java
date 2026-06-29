@@ -12,8 +12,8 @@ public enum Zone {
     RIGHT_LOW(9,"우측 하단");
 
 
-    private int zoneNumber;
-    private String zoneHeight;
+    private final int zoneNumber;
+    private final String zoneHeight;
 
     Zone(int zoneNumber,String zoneHeight) {
         this.zoneNumber = zoneNumber;

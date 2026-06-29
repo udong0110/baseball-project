@@ -5,11 +5,11 @@ import baseball.exception.InvalidPitchMetricException;
 
 public class HitterStat extends PlayerStat {
 
-    private double ops;
-    private double avg;
+    private final double ops;
+    private final double avg;
 
-    private Zone hitterpowerZone;
-    private Zone hitterWeakZone;
+    private final Zone hitterpowerZone;
+    private final Zone hitterWeakZone;
 
 
     public HitterStat(double ops, double avg, Zone hitterpowerZone, Zone hitterWeakZone) {

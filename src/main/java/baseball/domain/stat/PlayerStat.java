@@ -1,7 +1,6 @@
 package baseball.domain.stat;
 
-public class PlayerStat {
+public abstract class PlayerStat {
         // Map 마커용
-
 
 }

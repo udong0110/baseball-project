@@ -12,9 +12,9 @@ import java.util.Map;
 
 public class PitcherStat extends PlayerStat {
 
-    private double era;
+    private final double era;
     private final Map<PitchType, Pitch> pitch;
-    private Pitch strongPitch;
+    private final Pitch strongPitch;
 
     public PitcherStat(double era, Map<PitchType,Pitch> pitch, Pitch strongPitch) {
         if (era > 100.0 || era < 0) {

@@ -12,7 +12,7 @@ public enum     Team {
     NC("엔씨 다이노스"),
     KIA("기아 타이거즈");
 
-    private String teamName;
+    private final String teamName;
 
 
     Team(String teamName) {
