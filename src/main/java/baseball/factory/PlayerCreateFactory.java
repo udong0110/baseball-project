@@ -28,25 +28,22 @@ public class PlayerCreateFactory {
     }
 
     public static PlayerCreateFactory createHitter() {
-
-
         // 선수 정보 입력
-        Player commonHitter = createCommonPlayer();
+        Player commonHitter = createCommonHitter();
         // 타자 스탯 입력
         HitterStat hitterStat = inputHitterStat();
 
-        return new PlayerCreateFactory(new Hitter(commonHitter.getName(),commonHitter.getTeam(),commonHitter.getHandType(),commonHitter.getPlayerPosition()), hitterStat);
+        return new PlayerCreateFactory(commonHitter, hitterStat);
     }
 
     public static  PlayerCreateFactory createPitcher() {
 
         // 선수 정보 입력
-        Player commonPitcher = createCommonPlayer();
+        Player commonPitcher = createCommonPitcher();
         // 투수 스탯 입력
         PitcherStat pitcherStat = inputPitcherStat();
 
-        return new PlayerCreateFactory(new Pitcher(commonPitcher.getName(), commonPitcher.getTeam(), commonPitcher.getHandType(), commonPitcher.getPlayerPosition()), pitcherStat);
-
+        return new PlayerCreateFactory(commonPitcher, pitcherStat);
     }
 
     private static Map<PitchType,Pitch> inputPitches() {
@@ -74,10 +71,12 @@ public class PlayerCreateFactory {
         return pitchTypes;
     }
 
-    public static Player createCommonPlayer() {
+
+
+    public static Hitter createCommonHitter() {
         Team matchedTeam = null;
-        HandType matchedHandType = null;
-        PlayerPosition matchedPosition = null;
+        HandHitterType matchedHandType = null;
+        HitterPosition matchedPosition = null;
 
         System.out.print("선수 이름을 입력하세요: ");
         String playerName = scanner.nextLine();
@@ -86,17 +85,51 @@ public class PlayerCreateFactory {
         String InputTeamName = scanner.nextLine();
         matchedTeam = Team.findTeamByKorean(InputTeamName);
 
-        System.out.print("(왼손, 오른손, 양손)중 타자의 주손을 입력하세요: ");
+        System.out.print("등번호를 입력하세요: ");
+        int playerBackNumber = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("(좌타, 우타, 스위치히터)중 타자의 주손을 입력하세요: ");
         String handInputType = scanner.nextLine();
-        matchedHandType = HandType.findType(handInputType);
+        matchedHandType = HandHitterType.findType(handInputType);
 
         System.out.print("선수의 포지션을 입력하세요(1B,SS,SP 등): ");
         String inputPosition = scanner.nextLine().toUpperCase();
-        matchedPosition = PlayerPosition.getPlayerPosition(inputPosition);
+        matchedPosition = HitterPosition.getPosition(inputPosition);
 
-        return new Player(playerName, matchedTeam, matchedHandType, matchedPosition);
+        return new Hitter(playerName, matchedTeam, playerBackNumber, matchedHandType, matchedPosition);
 
     }
+
+    public static Pitcher createCommonPitcher() {
+        Team matchedTeam = null;
+        HandPitcherType matchedHandType = null;
+        PitcherPosition matchedPosition = null;
+
+        System.out.print("선수 이름을 입력하세요: ");
+        String playerName = scanner.nextLine();
+
+        System.out.print("팀 이름을 입력하세요 (롯데 자이언츠, 한화 이글스 등): ");
+        String InputTeamName = scanner.nextLine();
+        matchedTeam = Team.findTeamByKorean(InputTeamName);
+
+        System.out.print("등번호를 입력하세요: ");
+        int playerBackNumber = scanner.nextInt();
+        scanner.nextLine();
+
+        System.out.print("(왼손, 오른손, 양손)중 타자의 주손을 입력하세요: ");
+        String handInputType = scanner.nextLine();
+        matchedHandType = HandPitcherType.findType(handInputType);
+
+        System.out.print("선수의 포지션을 입력하세요(1B,SS,SP 등): ");
+        String inputPosition = scanner.nextLine().toUpperCase();
+        matchedPosition = PitcherPosition.getPosition(inputPosition);
+
+        return new Pitcher(playerName, matchedTeam,playerBackNumber, matchedHandType, matchedPosition);
+
+    }
+
+
 
     private static HitterStat inputHitterStat() {
 
