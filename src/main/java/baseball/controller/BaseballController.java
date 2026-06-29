@@ -1,5 +1,6 @@
 package baseball.controller;
 
+import baseball.analyzer.PitchingAnalyzer;
 import baseball.domain.player.*;
 import baseball.domain.stat.PlayerStat;
 import baseball.exception.InvalidPitchMetricException;
@@ -13,7 +14,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class BaseballController {
-    private final Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
     private final PlayerRepository repository = new PlayerRepository();
 
 
@@ -40,7 +41,7 @@ public class BaseballController {
 
 
     private void selectPlayer(Player player) {
-        PlayerStat playerStat = PlayerRepository.findByPlayer(player);
+        PlayerStat playerStat = PlayerRepository.findStatByPlayer(player);
         if (playerStat == null) {
             System.out.println("조회 결과 선택한 선수가 존재하지 않습니다.");
         } else {
@@ -60,6 +61,22 @@ public class BaseballController {
     }
 
     public void pitchingAnalyze() {
+        Hitter hitter = null;
+        Pitcher pitcher = null;
+        // 투수,타자 각각 입력을 받는다
+        System.out.println("====분석할 타자 정보 입력 단계====");
+        Player inputHitter = findPlayerByUserInput();
+        if (inputHitter instanceof Hitter) {
+             hitter = (Hitter) inputHitter;
+        }
+        System.out.println("====분석할 투수 정보 입력 단계====");
+        Player inputPitcher = findPlayerByUserInput();
+        if (inputPitcher instanceof Pitcher) {
+            pitcher = (Pitcher) inputPitcher;
+        }
+        PitchingAnalyzer pitchingAnalyzer = new PitchingAnalyzer(repository,hitter,pitcher);
+        pitchingAnalyzer.solutionDesign();
+        pitchingAnalyzer.simulationPitching();
 
     }
 
@@ -120,6 +137,20 @@ public class BaseballController {
 
         }
     }
+    private static Player findPlayerByUserInput() {
+        Team matchedTeam = null;
+        System.out.print("선수 이름을 입력하세요: ");
+        String playerName = scanner.nextLine();
 
+        System.out.print("팀 이름을 입력하세요 (롯데 자이언츠, 한화 이글스, lotte 등): ");
+        String InputTeamName = scanner.nextLine();
+        matchedTeam = Team.findTeamByKorean(InputTeamName);
+
+        System.out.print("등번호를 입력하세요: ");
+        int playerBackNumber = scanner.nextInt();
+        scanner.nextLine();
+
+        return PlayerRepository.findPlayer(playerName, matchedTeam, playerBackNumber);
+    }
 }
 
