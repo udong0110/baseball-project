@@ -7,15 +7,13 @@ import java.util.Objects;
 public class Player {
 
     private final String name;
-    private Team team;
+    private final Team team;
     private final HandType handType;
-    private PlayerPosition playerPosition;
+    private final PlayerPosition playerPosition;
 
     public Player(String name, Team team, HandType hand, PlayerPosition playerPosition) {
-        if (name.length() > 10) {
-            throw new IllegalArgumentException("이름 입력 실패.");
-        }
-        if (name==null ||name.trim().isEmpty()||team == null || hand == null || playerPosition == null) {
+
+        if (name==null ||name.length() > 10||name.trim().isEmpty()||team == null || hand == null || playerPosition == null) {
             throw new IllegalArgumentException("(팀) 이름 및 투타 및 포지션 입력 실패");
         }
         this.name = name;
