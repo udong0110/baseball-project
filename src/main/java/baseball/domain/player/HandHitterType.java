@@ -17,7 +17,7 @@ public enum HandHitterType {
 
     public static HandHitterType findType(String input) {
         for (HandHitterType type : HandHitterType.values()) {
-            if (type.description.equals(input) || type.name().equalsIgnoreCase(input)) {
+            if (type.description.equals(input)) {
                 return type;
             }
         }

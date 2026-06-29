@@ -4,22 +4,19 @@ import baseball.exception.InvalidPitchMetricException;
 
 import java.util.Objects;
 
-public class Player {
+public abstract class Player {
 
     private final String name;
     private final Team team;
-    private final HandType handType;
-    private final PlayerPosition playerPosition;
+    private final int backNumber;
 
-    public Player(String name, Team team, HandType hand, PlayerPosition playerPosition) {
-
-        if (name==null ||name.length() > 10||name.trim().isEmpty()||team == null || hand == null || playerPosition == null) {
-            throw new IllegalArgumentException("(팀) 이름 및 투타 및 포지션 입력 실패");
+    public Player(String name, Team team, int backNumber) {
+        if (name == null || name.length() > 10 || name.trim().isEmpty() || team == null || backNumber <= 0 || backNumber > 999) {
+            throw new IllegalArgumentException("(팀) 이름 및 등번호 기입 필수");
         }
         this.name = name;
         this.team = team;
-        this.handType = hand;
-        this.playerPosition = playerPosition;
+        this.backNumber = backNumber;
     }
 
     @Override
@@ -31,14 +28,13 @@ public class Player {
         Player player = (Player) o;
         return Objects.equals(name, player.name) &&
                 team == player.team &&
-                handType == player.handType
-                && playerPosition==player.playerPosition;
+                backNumber == player.backNumber;
     }
 
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getTeam(), getHandType());
+        return Objects.hash(getName(), getTeam(), getBackNumber());
     }
 
     public String getName() {
@@ -49,16 +45,7 @@ public class Player {
         return team;
     }
 
-    public HandType getHandType() {
-        return handType;
-    }
-
-    public PlayerPosition getPlayerPosition() {
-        return playerPosition;
-    }
-
-    @Override
-    public String toString() {
-        return "이름:  | " + name + " | 팀: " + team+" | 포지션: "+playerPosition;
+    public int getBackNumber() {
+        return backNumber;
     }
 }
