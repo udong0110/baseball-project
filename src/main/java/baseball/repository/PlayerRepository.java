@@ -8,18 +8,22 @@ import java.util.Map;
 
 public class PlayerRepository {
 
-    private Map<Player, PlayerStat> playerRepositoryMap = new HashMap<>();
+    private static final Map<Player, PlayerStat> playerRepositoryMap = new HashMap<>();
 
 
     public void save(Player player, PlayerStat playerStat) {
         playerRepositoryMap.put(player, playerStat);
     }
 
-    public PlayerStat findByPlayer(Player player) {
+    public static Map<Player, PlayerStat> getMap() {
+        return playerRepositoryMap;
+    }
+
+    public static PlayerStat findByPlayer(Player player) {
         return playerRepositoryMap.get(player);
     }
 
-    public Map<Player, PlayerStat> findAll() {
-        return playerRepositoryMap;
-    }
+   /* public static Map.Entry<Player, PlayerStat> getEntry() {
+    }*/
+
 }
