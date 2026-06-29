@@ -3,6 +3,9 @@ package baseball.analyzer;
 import baseball.domain.player.Hitter;
 import baseball.domain.player.Pitcher;
 
+import baseball.domain.player.Player;
+import baseball.exception.PlayerNotFound;
+import baseball.factory.PlayerCreateFactory;
 import baseball.repository.PlayerRepository;
 
 import java.util.Map;
@@ -10,18 +13,19 @@ import java.util.Map;
 public class PitchingAnalyzer {
 
     private final PlayerRepository playerRepository;
-    private Hitter pitcher;
-    private Pitcher hitter;
+    private final Hitter hitter ;
+    private final Pitcher pitcher ;
 
-    public PitchingAnalyzer(PlayerRepository playerRepository) {
+    public PitchingAnalyzer(PlayerRepository playerRepository, Hitter hitter, Pitcher pitcher) {
         this.playerRepository = playerRepository;
+        if (hitter == null || pitcher == null) {
+            throw new PlayerNotFound("[검색 오류] 선수를 찾지 못하였습니다.");
+        }
+        this.hitter = hitter;
+        this.pitcher = pitcher;
     }
 
     public void solutionDesign() {
-        // 선수(투수,타자)의 입력을 받는다
-
-        // 저장소에 선수가 존재한다면 필드변수에 저장한다
-        // 저장된 변수를 이용해서 solution을 제공해준다
 
         // pitchingSolution(투수,타자)
         // hittingSolution(투수,타자)
