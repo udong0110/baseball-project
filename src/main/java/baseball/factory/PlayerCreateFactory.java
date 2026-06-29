@@ -117,11 +117,11 @@ public class PlayerCreateFactory {
         int playerBackNumber = scanner.nextInt();
         scanner.nextLine();
 
-        System.out.print("(왼손, 오른손, 양손)중 타자의 주손을 입력하세요: ");
+        System.out.print("(좌투, 우투, 양투)중 투수의 투구 유형을 입력하세요: ");
         String handInputType = scanner.nextLine();
         matchedHandType = HandPitcherType.findType(handInputType);
 
-        System.out.print("선수의 포지션을 입력하세요(1B,SS,SP 등): ");
+        System.out.print("투수의 포지션을 입력하세요(SP,선발투수 등): ");
         String inputPosition = scanner.nextLine().toUpperCase();
         matchedPosition = PitcherPosition.getPosition(inputPosition);
 
