@@ -2,6 +2,8 @@ package baseball.controller;
 
 import baseball.analyzer.PitchingAnalyzer;
 import baseball.domain.player.*;
+import baseball.domain.stat.HitterStat;
+import baseball.domain.stat.PitcherStat;
 import baseball.domain.stat.PlayerStat;
 import baseball.exception.InvalidPitchMetricException;
 import baseball.exception.PitchTypeNotFound;
@@ -66,15 +68,18 @@ public class BaseballController {
         // 투수,타자 각각 입력을 받는다
         System.out.println("====분석할 타자 정보 입력 단계====");
         Player inputHitter = findPlayerByUserInput();
+        PlayerStat statByHitter = PlayerRepository.findStatByPlayer(inputHitter);
         if (inputHitter instanceof Hitter) {
              hitter = (Hitter) inputHitter;
         }
+
         System.out.println("====분석할 투수 정보 입력 단계====");
         Player inputPitcher = findPlayerByUserInput();
+        PlayerStat statByPitcher = PlayerRepository.findStatByPlayer(inputHitter);
         if (inputPitcher instanceof Pitcher) {
             pitcher = (Pitcher) inputPitcher;
         }
-        PitchingAnalyzer pitchingAnalyzer = new PitchingAnalyzer(repository,hitter,pitcher);
+        PitchingAnalyzer pitchingAnalyzer = new PitchingAnalyzer(hitter,(HitterStat) statByHitter,pitcher,(PitcherStat) statByPitcher);
         pitchingAnalyzer.solutionDesign();
         pitchingAnalyzer.simulationPitching();
 
