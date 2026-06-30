@@ -1,6 +1,7 @@
 package baseball.domain.stat;
 
 import baseball.domain.player.Zone;
+import baseball.domain.player.ZonePitch;
 import baseball.exception.InvalidPitchMetricException;
 
 public class HitterStat extends PlayerStat {
@@ -8,11 +9,11 @@ public class HitterStat extends PlayerStat {
     private final double ops;
     private final double avg;
 
-    private final Zone hitterpowerZone;
-    private final Zone hitterWeakZone;
+    private final ZonePitch powerZonePitch;
+    private final ZonePitch weakZonePitch;
 
 
-    public HitterStat(double ops, double avg, Zone hitterpowerZone, Zone hitterWeakZone) {
+    public HitterStat(double ops, double avg, ZonePitch powerZonePitch, ZonePitch weakZonePitch) {
         if (avg < 0.0 || avg > 1.0) {
             throw new InvalidPitchMetricException("타율 수치 오류(0.0 ~ 1.0 사이여야 함): " + avg);
         }
@@ -20,15 +21,12 @@ public class HitterStat extends PlayerStat {
             throw new InvalidPitchMetricException("OPS 수치 오류(음수 불가): " + ops);
         }
 
-        if ((hitterpowerZone == null) || (hitterpowerZone.getZoneNumber() < 1) || (hitterpowerZone.getZoneNumber() > 9)) {
-            throw new IllegalArgumentException("존 입력실패.");
-        }
-        if ((hitterWeakZone == null) || (hitterWeakZone.getZoneNumber() < 1) || (hitterWeakZone.getZoneNumber() > 9)) {
-            throw new IllegalArgumentException("존 입력실패.");
+        if ((powerZonePitch == null) || (weakZonePitch == null)) {
+            throw new IllegalArgumentException("[약점/강점 입력 실패]");
         }
 
-        this.hitterpowerZone = hitterpowerZone;
-        this.hitterWeakZone = hitterWeakZone;
+        this.powerZonePitch = powerZonePitch;
+        this.weakZonePitch = weakZonePitch;
 
         this.ops = ops;
         this.avg = avg;
@@ -43,19 +41,19 @@ public class HitterStat extends PlayerStat {
         return avg;
     }
 
-    public Zone getHitterpowerZone() {
-        return hitterpowerZone;
+    public ZonePitch getPowerZonePitch() {
+        return powerZonePitch;
     }
 
-    public Zone getHitterWeakZone() {
-        return hitterWeakZone;
+    public ZonePitch getWeakZonePitch() {
+        return weakZonePitch;
     }
 
     @Override
     public String toString() {
         return "| ops=" + ops +
                 " | avg=" + avg+
-                " | 강점=" + hitterpowerZone +
-                " | 약점=" + hitterWeakZone ;
+                " | 강점=" + powerZonePitch +
+                " | 약점=" + weakZonePitch;
     }
 }

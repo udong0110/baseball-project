@@ -58,7 +58,7 @@ public class PlayerCreateFactory {
             System.out.print("rpm을 입력하세요: ");
             int inputRpm = scanner.nextInt();
 
-            System.out.print("구속을 입력하세요: ");
+            System.out.print("평균 구속을 입력하세요: ");
             int inputBallSpeed = scanner.nextInt();
             scanner.nextLine();
 
@@ -89,7 +89,7 @@ public class PlayerCreateFactory {
         int playerBackNumber = scanner.nextInt();
         scanner.nextLine();
 
-        System.out.print("(좌타, 우타, 스위치히터)중 타자의 주손을 입력하세요: ");
+        System.out.print("(좌타, 우타, 스위치히터)중 타자의 타석을 입력하세요: ");
         String handInputType = scanner.nextLine();
         matchedHandType = HandHitterType.findType(handInputType);
 
@@ -133,26 +133,39 @@ public class PlayerCreateFactory {
 
     private static HitterStat inputHitterStat() {
 
-        Zone matchedPowerZone = null;
-        Zone matchedWeakZone = null;
+        ZonePitch matchedPowerZonePitch = null;
+        ZonePitch matchedWeakZonePitch = null;
 
-        System.out.print("타자의 타율을 입력하세요(0~1.0사이) : ");
+        System.out.print("타자의 타율을 입력하세요(0~1.0사이): ");
         double avg = scanner.nextDouble();
 
-        System.out.print("타자의 OPS를 입력하세요(0~2.0 사이) : ");
+        System.out.print("타자의 OPS를 입력하세요(0~2.0 사이): ");
         double ops = scanner.nextDouble();
         scanner.nextLine();
 
-        System.out.println("타자의 강점 존을 입력하세요(1~9) :");
+        System.out.print("타자의 강점 존을 입력하세요(1~9): ");
         int powerZoneInputNumber = scanner.nextInt();
-        matchedPowerZone = Zone.findFromNNumber(powerZoneInputNumber);
-
-        System.out.print("타자의 약점 존을 입력하세요(1~9) :");
-        int weakZoneInputNumber = scanner.nextInt();
-        matchedWeakZone = Zone.findFromNNumber(weakZoneInputNumber);
+        Zone matchedPowerZone = Zone.findFromNNumber(powerZoneInputNumber);
         scanner.nextLine();
 
-        return new HitterStat(ops, avg, matchedPowerZone, matchedWeakZone);
+        System.out.print("타자의 강점 구종을 입력하세요(직구,체인지업 등): ");
+        String inputStrongPitchType = scanner.nextLine();
+        PitchType strongPitchType = PitchType.findPitchTypeByKorean(inputStrongPitchType);
+
+        matchedPowerZonePitch = new ZonePitch(matchedPowerZone, strongPitchType);
+
+        System.out.print("타자의 약점 존을 입력하세요(1~9): ");
+        int weakZoneInputNumber = scanner.nextInt();
+        Zone matchedWeakZone = Zone.findFromNNumber(weakZoneInputNumber);
+        scanner.nextLine();
+
+        System.out.print("타자의 약점 구종을 입력하세요(직구,체인지업 등): ");
+        String inputWeakPitchType = scanner.nextLine();
+        PitchType weakPitchType = PitchType.findPitchTypeByKorean(inputWeakPitchType);
+
+        matchedWeakZonePitch = new ZonePitch(matchedWeakZone, weakPitchType);
+
+        return new HitterStat(ops, avg, matchedPowerZonePitch, matchedWeakZonePitch);
     }
 
     private static PitcherStat inputPitcherStat() {
