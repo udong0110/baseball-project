@@ -26,6 +26,19 @@ public class PitcherStat extends PlayerStat {
         this.era = era;
     }
 
+
+    public double getEra() {
+        return era;
+    }
+
+    public Map<PitchType, Pitch> getPitch() {
+        return pitch;
+    }
+
+    public Pitch getStrongPitch() {
+        return strongPitch;
+    }
+
     @Override
     public String toString() {
         List<String> pitchList = new ArrayList<>();
