@@ -25,6 +25,9 @@ public class HitterStat extends PlayerStat {
             throw new IllegalArgumentException("[약점/강점 입력 실패]");
         }
 
+        if (powerZonePitch == weakZonePitch) {
+            throw new IllegalArgumentException("약점과 강점이 같으면 안됩니다.");
+        }
         this.powerZonePitch = powerZonePitch;
         this.weakZonePitch = weakZonePitch;
 
