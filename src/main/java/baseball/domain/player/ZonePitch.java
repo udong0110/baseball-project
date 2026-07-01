@@ -2,6 +2,8 @@ package baseball.domain.player;
 
 import baseball.exception.InvalidPitchMetricException;
 
+import java.util.Objects;
+
 public class ZonePitch {
 
     private final Zone zone;
@@ -24,6 +26,18 @@ public class ZonePitch {
 
     public PitchType getPitchType() {
         return pitchType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        ZonePitch zonePitch = (ZonePitch) o;
+        return getZone() == zonePitch.getZone();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getZone());
     }
 
     @Override
