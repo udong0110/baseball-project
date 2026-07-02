@@ -9,6 +9,7 @@ import baseball.factory.PlayerCreateFactory;
 import baseball.repository.PlayerRepository;
 
 import java.util.Map;
+import java.util.Set;
 
 public class PitchingAnalyzer {
 
@@ -31,8 +32,6 @@ public class PitchingAnalyzer {
     }
 
 
-
-
     // avg를 기준으로 안타확률 조정
     public void simulationPitching() {
         System.out.println("선수 데이터 분석 중......");
@@ -45,19 +44,18 @@ public class PitchingAnalyzer {
         System.out.println();
         System.out.println();
         System.out.println("=========시뮬레이션 결과==========");
-        // 투타유형으로 안타 확률 조정하는 메서드
+
+
+        // 투타유형으로 안타 기댓값 조정하는 메서드
         compareHandType();
-
+        // rpm, 구속 각각 리그 평균과 비교하여 보정치, 안타 기댓값 조정하는 메서드
         compareRpmSpeed();
-        // 2. 타자의 강/약점 구종이 투수의 구종에 포함되는지
-        // 2-1 타자의 강점 구종이 투수 구종에 포함되는 경우
-        // 2-2 타자의 약점 구종이 투수 구종에 포함되는 경우
-        // 2-3 앞서 살핀 경우가 투수의 주무기 구종에 걸리는 경우
-        // 3. 투수 구종의 rpm과 속도를 보고 하위권,평균,상위권 을 나타냄
+        // 타자의 강/약점 구종에 따라 보정치, 안타 기댓값 조정하는 메서드
+        compareZonePitch();
 
 
-
-
+        // 표본이 적지만 타율이 0할인 타자는 초기화
+        // 후에 타석수 필드를 추가해 정교하게 리팩토링 예정
         if (hitPercent <= 0.00) {
             hitPercent = 0.05;
         }
@@ -66,54 +64,101 @@ public class PitchingAnalyzer {
         System.out.println("범타확률 = " +outPercent*100+"%");
     }
 
+
+    public void solutionDesign() {
+
+    }
+
+
+
+
+
+
+
+
+
+    private void compareZonePitch() {
+        PitchType hitterPowerType = hitterStat.getPowerZonePitch().getPitchType(); // 타자의 강점 구종
+        PitchType hitterWeakType = hitterStat.getWeakZonePitch().getPitchType(); // 타자의 약점 구종
+        Pitch strongPitch = pitcherStat.getStrongPitch();
+        PitchType pitcherPowerType = strongPitch.getPitchType();  // 투수의 강점 구종
+        Map<PitchType, Pitch> pitchTypes = pitcherStat.getPitch();//투수가 가지고 있는 구종
+
+        // 투수 보유 구종 중 타자의 강/약점 구종에 걸릴 때 차등 보정치 적용
+        // 투수가 타자보다 유리하다는 전제로 보정치 적용
+
+        boolean hasPowerMatch = pitchTypes.containsKey(hitterPowerType);
+        boolean hasWeakMatch = pitchTypes.containsKey(hitterWeakType);
+
+        // 투수 보유 구종에 타자 강/약점 구종이 존재할 때 안타 기댓값 상승
+        // 1-1. 타자의 강점 구종이 투수 구종에 포함될 때
+        if (hasPowerMatch) {
+            if (pitcherPowerType == hitterPowerType) {
+                // 타자의 강점 구종이 투수의 주 구종이라면 어쩔수 없이 던지지만 승부를 피한다는 선택지가 있으므로 7% 증가 적용
+                System.out.println("[강점 매칭] 투수의 주 구종이 타자의 강점 구종에 걸리므로 안타 기댓값이 5% 증가합니다.");
+                hitPercent *= 1.05;
+            } else {
+                // 타자의 강점 구종이 투수의 부 구종이라면 피한다는 선택지가 있으므로 2% 증가 적용
+                System.out.println("[강점 매칭] 투수의 보유 구종이 타자의 강점 구종에 걸리므로 안타 기댓값이 2% 증가합니다.");
+                hitPercent *= 1.02;
+            }
+        }
+        // 1-2 타자의 약점 구종이 투수 구종에 포함될 때
+        if (hasWeakMatch) {
+            if (pitcherPowerType == hitterWeakType) {
+                // 타자의 약점 구종이 투수의 주 구종이라면 투수는 주 구종으로 승부를 볼 확률이 높아서 10% 감소 적용
+                System.out.println("[약점 매칭] 투수의 주 구종이 타자의 약점 구종에 걸리므로 안타 기댓값이 10% 감소합니다.");
+                hitPercent *= 0.9;
+            } else {
+                System.out.println("[약점 매칭] 투수의 보유 구종이 타자의 약점 구종에 걸리므로 안타 기댓값이 5% 감소합니다.");
+                hitPercent *= 0.95;
+            }
+        }
+        if (!hasPowerMatch && !hasWeakMatch){
+            System.out.println("구종에 따른 강/약점이 존재하지 않아 안타 기댓값 증감이 이뤄지지 않습니다.");
+        }
+    }
+
     private void compareRpmSpeed() {
-        // 타자의 체감상 볼의 회전수보다 구속이 더 큰 영향을 끼치므로 보정 상한선의 차이를 둠
         Pitch strongPitch = pitcherStat.getStrongPitch();
         PitchType pitchType = strongPitch.getPitchType();
 
         double ballSpeed = strongPitch.getBallSpeed();
         double avgSpeed = pitchType.getAvgSpeed();
-
         double rpm = strongPitch.getRpm();
         double avgRpm = pitchType.getAvgRpm();
 
-        // 구속 5단계 차등 적용 보정 로직
+        // rpm과 speed를 각각 다르게 보정하는 이유는 타자 스탯 데이터에 rpm보다 구속에 더 영향을 받기 때문.
+        //  구속 5단계 비율 보정
         double speedDiff = ballSpeed - avgSpeed;
-
         if (speedDiff >= 6.0) {
-            System.out.println("투수의 구속이 리그 최상위권이므로 타자의 안타 확률이 5% 감소합니다.");
-            hitPercent -= 0.05;
+            System.out.println("투수의 구속이 리그 최상위권이므로 안타 기댓값이 5% 감소합니다.");
+            hitPercent *= 0.95;
         } else if (speedDiff >= 2.0) {
-            System.out.println("투수의 구속이 리그 상위권이므로 타자의 안타 확률이 3% 감소합니다.");
-            hitPercent -= 0.03;
+            System.out.println("투수의 구속이 리그 상위권이므로 안타 기댓값이 3% 감소합니다.");
+            hitPercent *= 0.97;
         } else if (speedDiff <= -6.0) {
-            System.out.println("투수의 구속이 리그 최하위권이므로 타자의 안타 확률이 5% 증가합니다.");
-            hitPercent += 0.05;
+            System.out.println("투수의 구속이 리그 최하위권이므로 안타 기댓값이 5% 증가합니다.");
+            hitPercent *= 1.05;
         } else if (speedDiff <= -2.0) {
-            System.out.println("투수의 구속이 리그 하위권이므로 타자의 안타 확률이 3% 증가합니다.");
-            hitPercent += 0.03;
-        } else {
-            System.out.println("투수의 구속이 리그 평균 수준이므로 상성 보정이 없습니다.");
+            System.out.println("투수의 구속이 리그 하위권이므로 안타 기댓값이 3% 증가합니다.");
+            hitPercent *= 1.03;
         }
 
-        // RPM 5단계 차등 적용 보정 로직
-
+        // rpm 5단계 비율 보정
         double rpmDiff = rpm - avgRpm;
-
         if (rpmDiff >= 200.0) {
-            System.out.println("주무기 회전수가 리그 최상위권이므로 타자의 안타 확률이 3% 감소합니다.");
-            hitPercent -= 0.03;
+            System.out.println("주구종 회전수가 리그 최상위권이므로 안타 기댓값이 3% 감소합니다.");
+            hitPercent *= 0.97;
         } else if (rpmDiff >= 70.0) {
-            System.out.println("주무기 회전수가 리그 상위권이므로 타자의 안타 확률이 1.5% 감소합니다.");
-            hitPercent -= 0.015;
+            System.out.println("주구종 회전수가 리그 상위권이므로 안타 기댓값이 1.5% 감소합니다.");
+            hitPercent *= 0.985;
         } else if (rpmDiff <= -200.0) {
-            System.out.println("주무기 회전수가 리그 최하위권이므로 타자의 안타 확률이 3% 증가합니다.");
-            hitPercent += 0.03;
+            System.out.println("주구종 회전수가 리그 최하위권이므로 안타 기댓값이 3% 증가합니다.");
+            hitPercent *= 1.03;
         } else if (rpmDiff <= -70.0) {
-            System.out.println("주무기 회전수가 리그 하위권이므로 타자의 안타 확률이 1.5% 증가합니다.");
-            hitPercent += 0.015;
-        } else {
-            System.out.println("주무기 회전수가 리그 평균 수준이므로 회전 보정이 없습니다.");
+            System.out.println("주구종 회전수가 리그 하위권이므로 안타 기댓값이 1.5% 증가합니다.");
+            hitPercent *= 1.015;
         }
     }
 
@@ -122,14 +167,14 @@ public class PitchingAnalyzer {
         HandHitterType hitterHand = hitter.getHandType();
 
         if (pitcherHand == HandPitcherType.RIGHT && hitterHand == HandHitterType.RIGHT) {
-            System.out.println("투수 " + pitcher.getName() + "은(는) 우투, 타자 " + hitter.getName() + "은(는) 우타이므로 안타 확률이 2% 감소합니다.");
-            hitPercent -= 0.02;
+            System.out.println("투수 " + pitcher.getName() + "(우투), 타자 " + hitter.getName() + " (우타)이므로 안타 기댓값이 2% 감소합니다.");
+            hitPercent *= 0.98;
         } else if (pitcherHand == HandPitcherType.LEFT && hitterHand == HandHitterType.LEFT) {
-            System.out.println("투수 " + pitcher.getName() + "은(는) 좌투, 타자 " + hitter.getName() + "은(는) 좌타이므로 안타 확률이 4% 감소합니다.");
-            hitPercent -= 0.04;
+            System.out.println("투수 " + pitcher.getName() + "(좌투), 타자 " + hitter.getName() + "(좌타)이므로 안타 기댓값이 4% 감소합니다.");
+            hitPercent *= 0.96;
         } else {
-            System.out.println("역상성 매치업이므로 안타 확률이 2% 증가합니다.");
-            hitPercent += 0.02;
+            System.out.println("역상성 매치업이므로 안타 기댓값이 2% 증가합니다.");
+            hitPercent *= 1.02;
         }
     }
 
