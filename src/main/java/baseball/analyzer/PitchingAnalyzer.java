@@ -5,11 +5,8 @@ import baseball.domain.player.*;
 import baseball.domain.stat.HitterStat;
 import baseball.domain.stat.PitcherStat;
 import baseball.exception.PlayerNotFound;
-import baseball.factory.PlayerCreateFactory;
-import baseball.repository.PlayerRepository;
 
 import java.util.Map;
-import java.util.Set;
 
 public class PitchingAnalyzer {
 
@@ -28,7 +25,7 @@ public class PitchingAnalyzer {
     // 검증 로직을 위한 필드변수
     private final boolean hasPowerMatch;
     private final boolean hasWeakMatch;
-    private final PitchType hitterPowerType; // 투수의 강점 구종
+    private final PitchType hitterPowerType; // 타자의 강점 구종
     private final PitchType hitterWeakType; // 타자의 약점 구종
     private final PitchType pitcherPowerType; // 투수의 강점 구종
     private final Map<PitchType, Pitch> pitchTypes; // 투수가 가지고 있는 구종
@@ -111,31 +108,84 @@ public class PitchingAnalyzer {
 
         System.out.println(pitcher.getName() + "(" + pitcher.getHandType() + ")" + " 피칭 디자인 분석 중...\n\n\n\n\n\n");
         if (this.hitPercent >= 0.33) {
-            System.out.println(hitter.getName() + "(" + hitter.getHandType() + ")의 안타 확률이 극도로 높습니다! 무조건 유인구로 어렵게 승부하십시오.\n");
+            System.out.println(hitter.getName() + "(" + hitter.getHandType() + ")의 안타 확률이 극도로 높습니다!! 무조건 유인구로 어렵게 승부하세요!!\n");
         } else if (this.hitPercent >= 0.30) {
             System.out.println(hitter.getName() + "(" + hitter.getHandType() + ")의 안타 확률이 높으므로 실투를 조심하고 신중하게 접근할 필요가 있습니다.\n");
         } else if (this.hitPercent >= 0.25) {
-            System.out.println(hitter.getName() + "(" + hitter.getHandType() + ")은(는) 무난한 타자입니다. 자신 있게 스트라이크 존 구석을 공략하십시오.\n");
+            System.out.println(hitter.getName() + "(" + hitter.getHandType() + ")은(는) 무난한 타자입니다. 자신 있게 스트라이크 존 구석을 공략하세요.\n");
         } else {
             System.out.println(hitter.getName() + "(" + hitter.getHandType() + ")은(는) 현재 타이밍이 맞지 않습니다. 정면 승부를 추천합니다.\n");
         }
 
-        // 우투우투, 우투좌타(우투양타), 좌투좌타, 좌투우타(좌투양타) 4가지 케이스로 나누기
+        countPitching();
 
+        finalPitching();
+    }
+
+    private void finalPitching() {
+        System.out.println("==================위닝 샷 공략======================");
+        // 타자의 약점존을 공략하는 방식으로 설정
+        // 추가적으로 타자의 약점 구종을 타자의 약점 존으로 던지는 방식
+        String hitterWeakZone = hitterStat.getWeakZonePitch().getZone().getZoneHeight();
+        if (pitchTypes.containsKey(hitterWeakType)) {
+            System.out.println("[약점 공략] "+ hitterWeakZone + "의 위치에 " + hitterWeakType + "을 던져 삼진을 유도하세요.");
+        } else {
+            System.out.println(pitcher.getName() + " 이(가) 보유한 구종 중 타자의 약점 구종이 존재하지 않습니다.");
+            System.out.println("타자의 약점 코스인" + hitterWeakZone + "의 위치에" + hitterPowerType + " 외에 가장 자신있는 구종을 던지세요.");
+        }
+    }
+
+    private void countPitching() {
+        System.out.println("==================초구/카운트 공략======================");
+        // 우투우투, 우투좌타(우투양타), 좌투좌타, 좌투우타(좌투양타) 4가지 케이스로 나누기
         HandPitcherType pitcherHand = pitcher.getHandType();
         HandHitterType hitterHand = hitter.getHandType();
 
-        if (pitcherHand == HandPitcherType.RIGHT && hitterHand == HandHitterType.RIGHT) {
+        double finalScore = getFinalScore();
+        String hitterPowerZone = hitterStat.getPowerZonePitch().getZone().getZoneHeight();
+        String hitterWeakZone = hitterStat.getWeakZonePitch().getZone().getZoneHeight();
 
-        } else if (pitcherHand == HandPitcherType.LEFT && hitterHand == HandHitterType.LEFT) {
+        if (hitterHand == HandHitterType.SWITCH) {
+            hitterHand = (pitcherHand == HandPitcherType.RIGHT) ? HandHitterType.LEFT : HandHitterType.RIGHT;
+        }
 
-        } else if (pitcherHand == HandPitcherType.LEFT && hitterHand == HandHitterType.RIGHT || pitcherHand == HandPitcherType.LEFT && hitterHand == HandHitterType.SWITCH) {
+        String recommendedZone = "";
 
+        if (hitterHand == HandHitterType.RIGHT) {
+            recommendedZone = "좌측";  // 투수기준 좌측 타자기준 바깥쪽
+            zoneAdvice(finalScore, hitterPowerZone, recommendedZone);
         } else {
+            recommendedZone = "우측";  // 투수기준 우측 타자기준 좌측
+            zoneAdvice(finalScore, hitterPowerZone, recommendedZone);
+        }
 
+
+        if (pitchTypes.containsKey(hitterPowerType)) {
+            System.out.println(pitcher.getName() + "이(가) 보유한 구종 중 타자의 강점 구종이 존재합니다.");
+            System.out.println(hitterPowerType+" 외의 구종으로 상대하는 것이 좋습니다.");
+        } else {
+            System.out.println(pitcher.getName() + "이(가) 보유한 구종 중 타자의 강점 구종이 존재하지 않습니다." );
+            System.out.println(pitcherPowerType + "을(를) 과감하게 던지는 것이 좋습니다.");
+        }
+
+
+    }
+
+    private void zoneAdvice(double finalScore, String hitterPowerZone, String recommendedZone) {
+        if (finalScore >= 3.0) {
+            System.out.println("타자의 핫존을 무시하고 구위를 믿고 몸쪽으로 과감하게 던지는 피칭이 좋습니다.");
+        } else if (finalScore >= 1.0) {
+            System.out.println(recommendedZone+" 바깥쪽으로 던지는 것을 추천하나 몸쪽을 신중하게 공략하는 것도 좋은 선택지입니다.");
+        } else if (finalScore < 1.0) {
+            if (hitterPowerZone.contains(recommendedZone)) {
+                System.out.println("바깥쪽이 타자의 강점이고 구위가 좋지 못하므로 몸쪽으로 던지는게 좋습니다. 다만 절대 실투가 되지 않게 바짝 붙여 던지는 것을 추천합니다.");
+            } else {
+                System.out.println(recommendedZone+" 바깥쪽으로 안전하게 던지는 것을 추천합니다.");
+            }
         }
     }
-        private void compareZonePitch () {
+
+    private void compareZonePitch () {
             // 투수 보유 구종 중 타자의 강/약점 구종에 걸릴 때 차등 보정치 적용
             // 투수가 타자보다 유리하다는 전제로 보정치 적용
             boolean highVolatilityMatched = (pitcherPowerType == hitterPowerType) || (pitcherPowerType == hitterWeakType); // 부 구종보다 주 구종에 걸릴 경우, 증감 변동성이 높음
