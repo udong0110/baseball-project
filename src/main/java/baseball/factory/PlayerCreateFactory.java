@@ -78,7 +78,7 @@ public class PlayerCreateFactory {
         HandHitterType matchedHandType = null;
         HitterPosition matchedPosition = null;
 
-        System.out.print("선수 이름을 입력하세요: ");
+        System.out.print("타자 이름을 입력하세요: ");
         String playerName = scanner.nextLine();
 
         System.out.print("팀 이름을 입력하세요 (롯데 자이언츠, 한화 이글스, lotte 등): ");
@@ -106,7 +106,7 @@ public class PlayerCreateFactory {
         HandPitcherType matchedHandType = null;
         PitcherPosition matchedPosition = null;
 
-        System.out.print("선수 이름을 입력하세요: ");
+        System.out.print("투수 이름을 입력하세요: ");
         String playerName = scanner.nextLine();
 
         System.out.print("팀 이름을 입력하세요 (롯데 자이언츠, 한화 이글스, lotte 등): ");
@@ -117,7 +117,7 @@ public class PlayerCreateFactory {
         int playerBackNumber = scanner.nextInt();
         scanner.nextLine();
 
-        System.out.print("(좌투, 우투, 양투)중 투수의 투구 유형을 입력하세요: ");
+        System.out.print("(좌투, 우투)중 투수의 투구 유형을 입력하세요: ");
         String handInputType = scanner.nextLine();
         matchedHandType = HandPitcherType.findType(handInputType);
 

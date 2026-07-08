@@ -10,7 +10,7 @@ public class BaseballStrategyMain {
         try {
             controller.run();
         } catch (Exception e) {
-            System.out.println("예상못한 예외가 발생하였습니다.");
+            System.out.println("예상못한 예외가 발생하였습니다."+e.getMessage());
         }
     }
 }

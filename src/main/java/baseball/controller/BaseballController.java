@@ -75,13 +75,13 @@ public class BaseballController {
 
         System.out.println("====분석할 투수 정보 입력 단계====");
         Player inputPitcher = findPlayerByUserInput();
-        PlayerStat statByPitcher = PlayerRepository.findStatByPlayer(inputHitter);
+        PlayerStat statByPitcher = PlayerRepository.findStatByPlayer(inputPitcher);
         if (inputPitcher instanceof Pitcher) {
             pitcher = (Pitcher) inputPitcher;
         }
         PitchingAnalyzer pitchingAnalyzer = new PitchingAnalyzer(hitter,(HitterStat) statByHitter,pitcher,(PitcherStat) statByPitcher);
-        pitchingAnalyzer.solutionDesign();
         pitchingAnalyzer.simulationPitching();
+        pitchingAnalyzer.solutionDesign();
 
     }
 
