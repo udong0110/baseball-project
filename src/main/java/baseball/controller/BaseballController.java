@@ -133,11 +133,14 @@ public class BaseballController {
             } catch (PitchTypeNotFound pitchTypeNotFound) {
                 System.out.println("\n[구종 오류] 구종이 올바르지 않습니다. " + pitchTypeNotFound.getMessage());
             } catch (InvalidPitchMetricException metricException) {
-                System.out.println("\n[범위 오류] 입력한 숫자가 범위를 벗어났습니다."+ metricException.getMessage());
-            } catch (IllegalArgumentException | java.util.InputMismatchException e) {
+                System.out.println("\n[범위 오류] 입력한 숫자가 범위를 벗어났습니다." + metricException.getMessage());
+            } catch (java.util.InputMismatchException e) {
                 System.out.println("\n[입력 오류] " + e.getMessage());
                 System.out.println("메인 메뉴로 돌아갑니다. 다시 시도해 주세요.");
                 scanner.nextLine();    // nextInt에 숫자 외 입력시 버퍼제거용
+            } catch (IllegalArgumentException e) {
+                System.out.println("\n[입력 오류] " + e.getMessage());
+
             }
 
         }
