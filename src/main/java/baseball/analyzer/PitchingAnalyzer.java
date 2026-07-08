@@ -103,10 +103,39 @@ public class PitchingAnalyzer {
     }
 
     private void hittingSolution() {
+        // 투수의 구위(finalscore)룰 보고 차등 접근법
+        // 타자의 강점구종을 노려치는 방법
+        // 타석에 서면 머리가 하얘지기 떄문에 단순한 접근법이 효율적
+        System.out.println("==================타자 타격 솔루션======================");
 
+        double finalScore = getFinalScore();
+
+        // 구위 기반 솔루션
+        System.out.print("[타격 접근법] ");
+        if (finalScore >= 1.0) {
+            System.out.println("상대 투수의 구위가 뛰어납니다. 배트를 짧게 쥐고 끈질기게 커트하며 실투나 볼넷을 유도하세요.");
+        } else if (finalScore <= -1.0) {
+            System.out.println("상대 투수의 구위가 밋밋합니다. 배트를 길게 잡고 적극적인 풀스윙으로 대형 장타를 노리세요.");
+        } else {
+            System.out.println("투수의 구위가 평범합니다. 평소 본인의 스윙 타이밍을 유지하며 중심 타격을 의식하세요.");
+        }
+
+        // 강점 구종 기반 솔루션
+        System.out.print("[노림수 전략] ");
+        if (pitchTypes.containsKey(hitterPowerType)) {
+            // 투수가 내 강점 구종을 던질 줄 알 때
+            System.out.println("투수의 구종에 타자의 절대 강점인 " + hitterPowerType + "이(가) 있습니다. 이 공이 들어오면 주저하지 말고 타격하세요.");
+        } else {
+            // 투수가 내 강점 구종을 아예 못 던질 때
+            System.out.println("상대 투수는 타자의 강점 구종을 던지지 않습니다. 특정 구종을 찍어놓기보다 스트라이크 존에 들어오는 실투를 놓치지 마세요.");
+        }
+        System.out.println("========================================================\n");
     }
 
     private void pitchingSolution() {
+
+
+        System.out.println("==================투수 피칭 솔루션======================");
 
         System.out.println(pitcher.getName() + "(" + pitcher.getHandType().getDescription() + ")" + " 피칭 디자인 분석 중...\n\n");
         if (this.hitPercent >= 0.33) {
@@ -128,6 +157,9 @@ public class PitchingAnalyzer {
         System.out.println();
 
         finalPitching();    // 결정구 솔루션
+
+        System.out.println("========================================================\n");
+
     }
 
     private void finalPitching() {
@@ -141,6 +173,7 @@ public class PitchingAnalyzer {
             System.out.println(pitcher.getName() + "이(가) 보유한 구종 중 타자의 약점 구종이 존재하지 않습니다.");
             System.out.println("타자의 약점 코스인 " + hitterWeakZone + "의 위치에 " + hitterPowerType + "외에 구종가치가 높은 구종을 던지세요.");
         }
+        System.out.println("========================================================\n");
     }
 
     private void countPitching() {
@@ -175,8 +208,7 @@ public class PitchingAnalyzer {
             System.out.println(pitcher.getName() + "이(가) 보유한 구종 중 타자의 강점 구종이 존재하지 않습니다." );
             System.out.println(pitcherPowerType + "을(를) 과감하게 던지는 것이 좋습니다.");
         }
-
-
+        System.out.println("========================================================\n");
     }
 
     private void zoneAdvice(double finalScore, String hitterPowerZone, String recommendedZone) {
