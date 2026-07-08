@@ -29,6 +29,9 @@ public abstract class Player {
         return Objects.equals(name, player.name) &&
                 team == player.team &&
                 backNumber == player.backNumber;
+                // 이게 Player계열은 검증하지만 Hitter인지 Pitcher인지는 검증해주지 않는다
+                // 따라서 같은팀 같은 이름 같은 등번호인 타자 투수를 저장소에 넣으려면 하나가 나머지를 덮어버릴 수 있다
+                // 투타겸업인 선수가 나오면 리팩토링
     }
 
 
